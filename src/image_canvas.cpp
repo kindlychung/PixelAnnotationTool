@@ -11,7 +11,6 @@ ImageCanvas::ImageCanvas(MainWindow *ui) :
 
     _scroll_parent = new QScrollArea(ui);
     setParent(_scroll_parent);
-	resize(800,600);
 	_scale = _ui->spinbox_scale->value();
 	_alpha = _ui->spinbox_alpha->value();
 	_pen_size = _ui->spinbox_pen_size->value();
@@ -36,11 +35,6 @@ ImageCanvas::~ImageCanvas() {
 void ImageCanvas::_initPixmap() {
 	QPixmap newPixmap = QPixmap(width(), height());
 	newPixmap.fill(Qt::white);
-	QPainter painter(&newPixmap);
-	const QPixmap * p = pixmap();
-	if (p != NULL)
-		painter.drawPixmap(0, 0, *pixmap());
-	painter.end();
 	setPixmap(newPixmap);
 }
 
@@ -55,7 +49,8 @@ void ImageCanvas::loadImage(const QString &filename) {
 	_image = mat2QImage(cv::imread(_img_file.toStdString()));
 	
 	_mask_file = file.dir().absolutePath()+ "/" + file.baseName() + "_mask.png";
-	_watershed_file = file.dir().absolutePath()+ "/" + file.baseName() + "_watershed_mask.png";
+    _mask_color_file = file.dir().absolutePath()+ "/" + file.baseName() + "_mask_color.png";
+    _watershed_file = file.dir().absolutePath()+ "/" + file.baseName() + "_watershed_mask.png";
 
 	_watershed = ImageMask(_image.size());
 	_undo_list.clear();
@@ -81,6 +76,7 @@ void ImageCanvas::saveMask() {
 		return;
 
 	_mask.id.save(_mask_file);
+    _mask.color.save(_mask_color_file);
 	if (!_watershed.id.isNull()) {
         QImage watershed = _watershed.id;
 //         if (!_ui->checkbox_border_ws->isChecked()) {
@@ -88,7 +84,7 @@ void ImageCanvas::saveMask() {
 //         }
 		watershed.save(_watershed_file);
 		QFileInfo file(_img_file);
-		QString color_file = file.dir().absolutePath() + "/" + file.baseName() + "_color_mask.png";
+        QString color_file = file.dir().absolutePath() + "/" + file.baseName() + "_watershed_color.png";
 		idToColor(watershed, _ui->id_labels).save(color_file);
 	}
     _undo_list.clear();

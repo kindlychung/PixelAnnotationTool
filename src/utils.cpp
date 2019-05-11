@@ -22,8 +22,13 @@ QImage idToColor(const QImage &image_id, const Id2Labels& id_label) {
 	return result;
 }
 
+/**
+ * @brief idToColor
+ * @param image_id A QImage with each pixel coded by label id
+ * @param id_label A QMap with label id as key
+ * @param result A QImage with each pixel coded by the color of the label to which it belongs
+ */
 void idToColor(const QImage &image_id, const Id2Labels& id_label, QImage *result) {
-	int id = 0;
 	uchar * pix;
 	for (int y = 0; y < image_id.height(); y++) {
 		const uchar * line_in = image_id.scanLine(y);
@@ -34,9 +39,9 @@ void idToColor(const QImage &image_id, const Id2Labels& id_label, QImage *result
 			if (it != id_label.end()) {
 				pix = &line_out[x];
 				const LabelInfo * label = *it;
-				*pix = label->color.red(); pix++;
-				*pix = label->color.green(); pix++;
-				*pix = label->color.blue();
+				*pix = static_cast<uchar>(label->color.red()); pix++;
+				*pix = static_cast<uchar>(label->color.green()); pix++;
+				*pix = static_cast<uchar>(label->color.blue());
             } else {
                 pix = &line_out[x];
                 pix[0] = 255;

@@ -16,7 +16,7 @@ class ImageCanvas : public QLabel {
 public:
 
 	ImageCanvas(MainWindow *ui);
-    ~ImageCanvas();
+    ~ImageCanvas() override;
 
 	void setId(int id);
 	void setMask(const ImageMask & mask);
@@ -67,6 +67,7 @@ private:
 	QPoint           _mouse_pos        ;
 	QString          _img_file         ;
 	QString          _mask_file        ;
+    QString          _mask_color_file        ;
 	QString          _watershed_file   ;
 	ColorMask        _color            ;
 	int              _pen_size         ;
