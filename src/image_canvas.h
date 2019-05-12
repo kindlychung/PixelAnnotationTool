@@ -62,7 +62,7 @@ private:
 	ImageMask        _mask             ;
 	ImageMask        _watershed        ;
 	QList<ImageMask> _undo_list        ;
-	bool             _undo             ;
+	bool             _in_undo_state             ;
 	int              _undo_index       ;
 	QPoint           _mouse_pos        ;
 	QString          _img_file         ;

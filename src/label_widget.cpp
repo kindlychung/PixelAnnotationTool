@@ -33,7 +33,7 @@ void LabelWidget::paintEvent(QPaintEvent *event) {
 		QColor inv = invColor(_label.color);
 		QPainter p(this);
 		QPen pen(inv);
-		pen.setWidth(4);
+        pen.setWidth(9);
 		p.setPen(pen);
 		p.setBrush(QBrush(inv));
 		p.setOpacity(0.3);

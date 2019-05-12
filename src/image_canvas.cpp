@@ -21,7 +21,7 @@ ImageCanvas::ImageCanvas(MainWindow *ui) :
 
 	_undo_list.clear();
 	_undo_index = 0;
-	_undo = false;
+    _in_undo_state = false;
 
     _scroll_parent->setBackgroundRole(QPalette::Dark);
     _scroll_parent->setWidget(this);
@@ -116,14 +116,17 @@ void ImageCanvas::paintEvent(QPaintEvent *event) {
 	painter.drawImage(QPoint(0, 0), _image);
 	painter.setOpacity(_alpha);
 
+    // draw colorized mask
 	if (!_mask.id.isNull() && _ui->checkbox_manuel_mask->isChecked()) {
 		painter.drawImage(QPoint(0, 0), _mask.color);
 	}
 		
+    // draw colorized watershed mask
 	if (!_watershed.id.isNull() && _ui->checkbox_watershed_mask->isChecked()) {
 		painter.drawImage(QPoint(0, 0), _watershed.color);
 	}
 
+    // draw the pen cursor
 	if (_mouse_pos.x() > 10 && _mouse_pos.y() > 10 && 
 		_mouse_pos.x() <= QLabel::size().width()-10 &&
 		_mouse_pos.y() <= QLabel::size().height()-10) {
@@ -137,10 +140,9 @@ void ImageCanvas::paintEvent(QPaintEvent *event) {
 void ImageCanvas::mouseMoveEvent(QMouseEvent * e) {
 	_mouse_pos.setX(e->x());
 	_mouse_pos.setY(e->y());
-
 	if (_button_is_pressed) 
 		_drawFillCircle(e);
-
+    // updates the ui with new masks
 	update();
 }
 
@@ -152,8 +154,8 @@ void ImageCanvas::setSizePen(int pen_size) {
 void ImageCanvas::mouseReleaseEvent(QMouseEvent * e) {
 	if(e->button() == Qt::LeftButton) {
 		_button_is_pressed = false;
-		
-		if (_undo) {
+        if (_in_undo_state) {
+            // remove all states after the current state, to avoid branching in history
 			QMutableListIterator<ImageMask> it(_undo_list);
 			int i = 0;
 			while (it.hasNext()) {
@@ -161,7 +163,7 @@ void ImageCanvas::mouseReleaseEvent(QMouseEvent * e) {
 				if (i++ >= _undo_index)
 					it.remove();
 			}
-			_undo = false;
+            _in_undo_state = false;
 			_ui->redo_action->setEnabled(false);
 		}
 		_undo_list.push_back(_mask);
@@ -171,18 +173,18 @@ void ImageCanvas::mouseReleaseEvent(QMouseEvent * e) {
 	}
 
 	if (e->button() == Qt::RightButton) { // selection of label
-		QColor color = _mask.id.pixel(_mouse_pos / _scale);
-		const LabelInfo * label = _ui->id_labels[color.red()];
-
-		if (!_watershed.id.isNull() && _ui->checkbox_watershed_mask->isChecked()) {
-			QColor color = QColor(_watershed.id.pixel(_mouse_pos / _scale));
-			QMap<int, const LabelInfo*>::const_iterator it = _ui->id_labels.find(color.red());
-			if (it != _ui->id_labels.end()) {
-				label = it.value();
-			}
-		}
-		if(label->item != NULL)
-			emit(_ui->list_label->currentItemChanged(label->item, NULL));
+//        QColor color_in_mask = _mask.id.pixel(_mouse_pos / _scale);
+//        const LabelInfo * label = _ui->id_labels[color_in_mask.red()]; // label id is coded in the R channel of the RGB
+//		if (!_watershed.id.isNull() && _ui->checkbox_watershed_mask->isChecked()) {
+//            QColor color_in_watershed = QColor(_watershed.id.pixel(_mouse_pos / _scale));
+//            QMap<int, const LabelInfo*>::const_iterator it = _ui->id_labels.find(color_in_watershed.red());
+//			if (it != _ui->id_labels.end()) {
+//				label = it.value();
+//                qDebug() << "#### label changed to: " << label->name;
+//			}
+//		}
+//        if(label->item != nullptr)
+//            emit(_ui->list_label->currentItemChanged(label->item, nullptr));
 
 		refresh();
 	}
@@ -238,7 +240,8 @@ void ImageCanvas::wheelEvent(QWheelEvent * event) {
 	int delta = event->delta() > 0 ? 1 : -1;
 	if (Qt::ShiftModifier == event->modifiers()) {
         _scroll_parent->verticalScrollBar()->setEnabled(false);
-		int value = _ui->spinbox_pen_size->value() + delta * _ui->spinbox_pen_size->singleStep();
+        _scroll_parent->horizontalScrollBar()->setEnabled(false);
+        int value = _ui->spinbox_pen_size->value() + delta * _ui->spinbox_pen_size->singleStep();
 		_ui->spinbox_pen_size->setValue(value);
 		emit(_ui->spinbox_pen_size->valueChanged(value));
 		setSizePen(value);
@@ -294,7 +297,7 @@ void ImageCanvas::refresh() {
 
 
 void ImageCanvas::undo() {
-	_undo = true;
+    _in_undo_state = true;
 	_undo_index--;
 	if (_undo_index == 1) {
 		_mask = _undo_list.at(_undo_index - 1);
