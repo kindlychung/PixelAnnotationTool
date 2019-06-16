@@ -1,0 +1,9 @@
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-debug/CMakeFiles/upload_file.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-debug/CMakeFiles/copy_pat.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-debug/CMakeFiles/extract_appimage.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-debug/CMakeFiles/PixelAnnotationTool.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-debug/CMakeFiles/make_zip.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-debug/CMakeFiles/deploy_qt.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-debug/CMakeFiles/PixelAnnotationTool_autogen.dir

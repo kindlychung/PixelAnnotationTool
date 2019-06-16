@@ -1,0 +1,9 @@
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-ninja/CMakeFiles/rebuild_cache.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-ninja/CMakeFiles/edit_cache.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-ninja/CMakeFiles/upload_file.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-ninja/CMakeFiles/copy_pat.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-ninja/CMakeFiles/extract_appimage.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-ninja/CMakeFiles/PixelAnnotationTool.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-ninja/CMakeFiles/make_zip.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-ninja/CMakeFiles/deploy_qt.dir
+/home/kaiyin/cProjects/PixelAnnotationTool/cmake-build-ninja/CMakeFiles/PixelAnnotationTool_autogen.dir

@@ -53,9 +53,11 @@ find_path(Qt5Gui_DIR Qt5GuiConfig.cmake         PATHS "${QT5_DIR}/Qt5Gui"     )
 	
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Gui REQUIRED)
-find_package(OpenCV REQUIRED)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${OpenCV_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
 
 qt5_wrap_ui(UI_TEST_HDRS src/main_window.ui )
 add_executable(PixelAnnotationTool MACOSX_BUNDLE WIN32
@@ -75,7 +77,7 @@ add_executable(PixelAnnotationTool MACOSX_BUNDLE WIN32
 	src/label_widget.h 
 	src/main.cpp 
 	${UI_TEST_HDRS})
-target_link_libraries(PixelAnnotationTool Qt5::Gui Qt5::Widgets ${OpenCV_LIBS})	
+target_link_libraries(PixelAnnotationTool Qt5::Gui Qt5::Widgets ${CONAN_LIBS})
 add_custom_command(TARGET PixelAnnotationTool PRE_BUILD COMMAND cmake -P ${CMAKE_BINARY_DIR}/git_version.cmake)
 
 set(OpenCV_BIN ${OpenCV_LIB_PATH}/../bin)
@@ -87,12 +89,6 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/images_test/Abbey_Road.jpg
           ${CMAKE_CURRENT_SOURCE_DIR}/images_test/road1.jpg 
           DESTINATION ${DIR_NAME_RELEASE}/images_test )
           
-string(REGEX REPLACE "\\." "" CV_VERSION_NUMBER ${OpenCV_VERSION})
-if( "${OpenCV_LIBS}" MATCHES "opencv_world" )
-  set(OpenCV_MODULE_EXPORT "opencv_world")
-else()
-  set(OpenCV_MODULE_EXPORT "opencv_core;opencv_imgcodecs;opencv_imgproc")
-endif()
 
 find_program(CURL curl)
 if( CURL-NOTFOUND )

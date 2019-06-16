@@ -1,0 +1,8 @@
+# Hashes of file build rules.
+8ba07f333fc15a1fdf5cc551d40241fb CMakeFiles/PixelAnnotationTool_autogen
+43e9a63464a9b032fb9e3ef561f1fff9 CMakeFiles/copy_pat
+75a760f537ce61019194c3f27bb48470 CMakeFiles/deploy_qt
+78b24d69cf89a23d3828e494f4792d7a CMakeFiles/extract_appimage
+8f8402f2cdf1d70b2f019b009e8c4f8c CMakeFiles/make_zip
+e9946443b1e60b0e98529d8185619fab CMakeFiles/upload_file
+5c8d1588e744fb572efc3ad392f0fe3f ui_main_window.h
