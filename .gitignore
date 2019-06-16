@@ -34,3 +34,5 @@ script_to_build/build/
 scripts_to_build/build/
 scripts_to_build/squashfs-root/
 x64
+cmake_build*
+build*
